@@ -1,8 +1,0 @@
-FROM python:3.9-slim
-
-WORKDIR /app
-COPY event_manager.py observer.py /app/
-RUN apt-get update && apt-get install -y curl && pip install flask requests
-
-EXPOSE 7000
-CMD ["python", "event_manager.py"]

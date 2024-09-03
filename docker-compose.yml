@@ -1,32 +1,30 @@
 version: '3.8'
 services:
-  event_manager:
+  stock_monitor:
     build:
       context: .
-      dockerfile: Dockerfile.event_manager
-    image: basliel13/event_management_api:event_manager
-    ports:
-      - "7000:7000"
-
-  email_service:
-    build:
-      context: .
-      dockerfile: Dockerfile.email_service
-    image: basliel13/event_management_api:email_service
-    ports:
-      - "7001:7001"
+      dockerfile: Dockerfile.stock_monitor
+    image: basliel13/stock_monitor_api:stock_monitor
     depends_on:
-      - event_manager
+      - logging_service
+      - analytics_service
+      - notification_service
+
+  api_service:
+    build:
+      context: .
+      dockerfile: Dockerfile.api_service
+    image: basliel13/stock_monitor_api:api_service
+    ports:
+      - "5000:5000"
+    depends_on:
+      - stock_monitor
 
   logging_service:
     build:
       context: .
       dockerfile: Dockerfile.logging_service
-    image: basliel13/event_management_api:logging_service
-    ports:
-      - "7002:7002"
-    depends_on:
-      - event_manager
+    image: basliel13/stock_monitor_api:logging_service
     volumes:
       - logs:/logs
 
@@ -34,11 +32,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.analytics_service
-    image: basliel13/event_management_api:analytics_service
-    ports:
-      - "7003:7003"
-    depends_on:
-      - event_manager
+    image: basliel13/stock_monitor_api:analytics_service
+
+  notification_service:
+    build:
+      context: .
+      dockerfile: Dockerfile.notification_service
+    image: basliel13/stock_monitor_api:notification_service
 
 volumes:
   logs:

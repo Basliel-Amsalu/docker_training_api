@@ -4,4 +4,4 @@ WORKDIR /app
 
 COPY . .
 
-CMD ["python", "analytics_service.py"]
+CMD ["python", "notification_service.py"]
