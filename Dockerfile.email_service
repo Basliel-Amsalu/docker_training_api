@@ -1,0 +1,8 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+COPY email_service.py observer.py /app/
+RUN apt-get update && apt-get install -y curl && pip install flask requests
+
+EXPOSE 7001
+CMD ["python", "email_service.py"]
