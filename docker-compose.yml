@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  event_manager:
+    build:
+      context: .
+      dockerfile: Dockerfile.event_manager
+    image: basliel13/event_management_api:event_manager
+    ports:
+      - "7000:7000"
+
+  email_service:
+    build:
+      context: .
+      dockerfile: Dockerfile.email_service
+    image: basliel13/event_management_api:email_service
+    ports:
+      - "7001:7001"
+    depends_on:
+      - event_manager
+
+  logging_service:
+    build:
+      context: .
+      dockerfile: Dockerfile.logging_service
+    image: basliel13/event_management_api:logging_service
+    ports:
+      - "7002:7002"
+    depends_on:
+      - event_manager
+    volumes:
+      - logs:/logs
+
+  analytics_service:
+    build:
+      context: .
+      dockerfile: Dockerfile.analytics_service
+    image: basliel13/event_management_api:analytics_service
+    ports:
+      - "7003:7003"
+    depends_on:
+      - event_manager
+
+volumes:
+  logs:
